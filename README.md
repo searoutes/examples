@@ -5,8 +5,8 @@ This small project shows an example of how to use Searoutes' API to obtain the r
 To run this project, you need java 11, the latest version of [gradle](https://gradle.org/install/), and an API key (you can get one from us [here](https://searoutes.typeform.com/to/ZRAoy5)).
 
 ```sh
-$ git clone <project>
-$ cd <project> & gradle build 
+$ git clone git@github.com:searoutes/examples.git
+$ cd examples & gradle build 
 $ export SEAROUTES_API_KEY=<your_api_key>
 $ gradle run
 ```
