@@ -12,9 +12,10 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.springframework', name: 'spring-web', version: '5.2.8.RELEASE'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-geojson:5.4.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
+    compile group: 'org.springframework', name: 'spring-web', version: '5.2.8.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 

@@ -2,33 +2,43 @@ package service;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import config.SearoutesApi;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 
 public class RouteService {
 
-    public void getRoute() throws Exception {
+    private String getCoordsFromPoints(List<Point> points) {
+        StringBuilder sb = new StringBuilder();
+        for(Point point : points) {
+            sb.append(point.coordinates().get(0).toString() + "," + point.coordinates().get(1) + ";");
+        }
+        return sb.substring(0,sb.length()-1);
+    }
 
+    public FeatureCollection getRoute(List<Point> points){
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SearoutesApi.getSeaRouteUrl() + "/50.47119140624999,42.27730877423709;13.809814453125,37.046408899699564?vesselDraft=3.6"))
+                .uri(URI.create(SearoutesApi.getSeaRouteUrl() + "/" + getCoordsFromPoints(points)))
                 .header("x-api-key", SearoutesApi.getKey())
                 .build();
-        HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
 
-        FeatureCollection routeFeatureCollection = FeatureCollection.fromJson(response.body());
-        for(Feature routeFeature: routeFeatureCollection.features()) {
-            System.out.println("distance: " + routeFeature.getProperty("distance"));
-            System.out.println("departure: " +routeFeature.getProperty("departure"));
-            System.out.println("arrival: " +routeFeature.getProperty("arrival"));
-            System.out.println("secaIntersection: " +routeFeature.getProperty("secaIntersection"));
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return FeatureCollection.fromJson(response.body());
     }
 }
