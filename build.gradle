@@ -1,0 +1,23 @@
+apply plugin : "application"
+
+mainClassName = "Application"
+
+group 'com.searoutes.api'
+version '1.0'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-web', version: '5.2.8.RELEASE'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-geojson:5.4.1'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
