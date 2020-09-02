@@ -3,6 +3,8 @@ package service;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import config.SearoutesApi;
+import org.springframework.security.acls.model.NotFoundException;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,14 +24,17 @@ public class GeocodingService {
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        FeatureCollection portFeatureCollection = FeatureCollection.fromJson(response.body());
-        return (Point) portFeatureCollection.features().get(0).geometry();
+        FeatureCollection portFeatureCollection;
+        if (response != null && response.statusCode() == 200) {
+            portFeatureCollection = FeatureCollection.fromJson(response.body());
+            return (Point) portFeatureCollection.features().get(0).geometry();
+        } else {
+            throw new NotFoundException("Port " + unlocode + " not found.");
+        }
     }
 
 }

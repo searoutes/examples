@@ -1,10 +1,9 @@
 package service;
 
-import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import config.SearoutesApi;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.NotFoundException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,7 +18,7 @@ public class RouteService {
     private String getCoordsFromPoints(List<Point> points) {
         StringBuilder sb = new StringBuilder();
         for(Point point : points) {
-            sb.append(point.coordinates().get(0).toString() + "," + point.coordinates().get(1) + ";");
+            sb.append(point.coordinates().get(0).toString()).append(",").append(point.coordinates().get(1)).append(";");
         }
         return sb.substring(0,sb.length()-1);
     }
@@ -34,11 +33,13 @@ public class RouteService {
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return FeatureCollection.fromJson(response.body());
+        if (response != null && response.statusCode() == 200) {
+            return FeatureCollection.fromJson(response.body());
+        } else {
+            throw new NotFoundException("Route not found.");
+        }
     }
 }

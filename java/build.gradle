@@ -16,6 +16,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     compile group: 'org.springframework', name: 'spring-web', version: '5.2.8.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-acl', version: '5.3.4.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 

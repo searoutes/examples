@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Application {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         GeocodingService geocodingService = new GeocodingService();
         RouteService routeService = new RouteService();
